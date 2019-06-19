@@ -1,6 +1,7 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
+const Campground = require("./models/campground")
 const app = express()
 const port = 3000
 
@@ -11,14 +12,6 @@ app.listen(port, () => {
 mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true })
 app.use(bodyParser.urlencoded({extended: true}))
 app.set("view engine", "ejs")
-
-let campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String 
-})
-
-let Campground = mongoose.model("Campground", campgroundSchema)
 
 app.get("/", (req, res) => {
     res.render("landing")
