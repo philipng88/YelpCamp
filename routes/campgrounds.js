@@ -29,6 +29,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
         if(err) {
             console.log(err)
         } else {
+            req.flash("success", "Campground added") 
             res.redirect("/campgrounds") 
         }
     })
@@ -69,6 +70,7 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) => {
         if(err) {
             res.redirect("/campgrounds") 
         } 
+        req.flash("success", "Campground deleted") 
         Comment.deleteMany({_id: {$in: campgroundRemoved.comments}}, err => {
             if(err) {
                 console.log(err)
