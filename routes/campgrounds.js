@@ -1,12 +1,33 @@
 const express = require("express")
 const router = express.Router()
 const Campground = require("../models/campground")
+const Comment = require("../models/comment") 
+const mongoose = require("mongoose")
+mongoose.set('useFindAndModify', false)
 
 const isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next()
     }
     res.redirect("/login") 
+}
+
+const checkCampgroundOwnership = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        Campground.findById(req.params.id, (err, foundCampground) => {
+            if(err) {
+                res.redirect("back")
+            } else {
+                if (foundCampground.author.id.equals(req.user._id)) {
+                    next()
+                } else {
+                    res.redirect("back") 
+                }
+            }
+        })
+    } else {
+        res.redirect("back") 
+    }
 }
 
 router.get("/", (req, res) => {
@@ -49,6 +70,36 @@ router.get("/:id", (req, res) => {
             res.render("campgrounds/show", {campground: foundCampground}) 
         }
     }) 
+})
+
+router.get("/:id/edit", checkCampgroundOwnership, (req, res) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+        res.render("campgrounds/edit", {campground: foundCampground}) 
+    })
+})
+
+router.put("/:id", checkCampgroundOwnership, (req, res) => {
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) => {
+        if(err) {
+            res.redirect("/campgrounds") 
+        } else {
+            res.redirect("/campgrounds/" + req.params.id) 
+        }
+    })
+})
+
+router.delete("/:id", checkCampgroundOwnership, (req, res) => {
+    Campground.findByIdAndRemove(req.params.id, (err, campgroundRemoved) => {
+        if(err) {
+            res.redirect("/campgrounds") 
+        } 
+        Comment.deleteMany({_id: {$in: campgroundRemoved.comments}}, err => {
+            if(err) {
+                console.log(err)
+            }
+            res.redirect("/campgrounds") 
+        })
+    })
 })
 
 module.exports = router 

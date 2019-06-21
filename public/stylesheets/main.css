@@ -9,3 +9,7 @@
 #show-page-image {
     padding: 0;
 }
+
+.delete-form {
+    display: inline;
+}
