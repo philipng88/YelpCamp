@@ -17,3 +17,15 @@
 .checked {
     color: orange;
 }
+
+#login-btn,
+#navbar-username-display {
+    margin-right: 5px;
+}
+
+.login-form,
+.register-form,
+.new-campground-creation-form {
+    width: 30%; 
+    margin: 25px auto;
+}
