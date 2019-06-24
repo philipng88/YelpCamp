@@ -11,15 +11,49 @@ router.get("/", (req, res) => {
     let perPage = 8
     let pageQuery = parseInt(req.query.page)
     let pageNumber = pageQuery ? pageQuery : 1 
-    Campground.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec((err, allCampgrounds) => {
-        Campground.estimatedDocumentCount().exec((err, count) => {
-            if (err) {
-                console.log(err)
-            } else {
-                res.render("campgrounds/index", {campgrounds: allCampgrounds, current: pageNumber, pages: Math.ceil(count / perPage)})
-            }
+    let noMatch = null 
+    const escapeRegex = text => {
+        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
+    }
+
+    if (req.query.search) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi')
+        Campground.find({name: regex}).skip((perPage * pageNumber) - perPage).limit(perPage).exec((err, allCampgrounds) => {
+            Campground.countDocuments({name: regex}).exec((err, count) => {
+                if (err) {
+                    console.log(err)
+                    res.redirect("back")
+                } else {
+                    if (allCampgrounds.length < 1) {
+                        noMatch = "No campgrounds match that search. Please try again"
+                    }
+                    res.render("campgrounds/index", {
+                        campgrounds: allCampgrounds,
+                        current: pageNumber,
+                        pages: Math.ceil(count / perPage),
+                        noMatch: noMatch,
+                        search: req.query.search 
+                    })
+                }
+            })
         })
-    })
+    } else {
+        Campground.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec((err, allCampgrounds) => {
+            Campground.countDocuments().exec((err, count) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    res.render("campgrounds/index", {
+                        campgrounds: allCampgrounds, 
+                        current: pageNumber, 
+                        pages: Math.ceil(count / perPage),
+                        noMatch: noMatch,
+                        search: false
+                    })
+                }
+            })
+        })
+    }
 })
 
 router.post("/", middleware.isLoggedIn, (req, res) => {
