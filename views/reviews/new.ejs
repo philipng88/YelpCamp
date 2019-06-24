@@ -1,8 +1,10 @@
 <% include ../partials/header %>
 <div class="container">
     <div class="row">
-        <h1 style="text-align: center">Review for <%= campground.name %></h1>
-        <div style="width: 30%; margin: 25px auto;">
+        <div class="col-md-12 text-center">
+            <h1>Review for <%= campground.name %></h1>
+        </div>
+        <div class="form-primary">
             <form action="/campgrounds/<%= campground._id %>/reviews" method="POST">
                 <div class="form-group">
                     <label for="rating">Leave a rating:</label>

@@ -7,7 +7,7 @@
                 <li class="list-group-item active">Info 1</li>
                 <li class="list-group-item">Info 2</li>
                 <li class="list-group-item">Info 3</li>
-                <a style="margin-top: 10px;" class="btn btn-default text-left" href="/campgrounds"><i class="fas fa-arrow-left"></i> Back</a>
+                <a class="btn btn-default text-left" href="/campgrounds"><i class="fas fa-arrow-left"></i> Back</a>
             </div>
         </div>
         <div class="col-md-9">
@@ -48,7 +48,7 @@
                         Current campground rating: <strong><%= campground.rating.toFixed(2) %></strong>
                     </p>
                     <p><h4>Latest reviews for this campground:</h4></p>
-                    <hr style="margin-top: 0;">
+                    <hr>
                     <% campground.reviews.slice(0, 5).forEach(function(review){ %>
                     <div class="row">
                         <div class="col-md-3">
@@ -57,7 +57,7 @@
                             <span><em><%= review.updatedAt.toDateString() %></em></span>
                         </div>
                         <div class="col-md-9">
-                            <p style="text-align: justify; word-wrap: break-word;">
+                            <p class="review-text">
                                 <%= review.text %>
                             </p>
                             <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
@@ -71,12 +71,12 @@
                     </div>
                     <hr>
                     <% }); %>
-                    <div style="margin-bottom: 10px;">
+                    <div>
                         <h4><a href="/campgrounds/<%= campground._id %>/reviews"><i class="fa fa-search" aria-hidden="true"></i> See all reviews</a></h4>
                     </div>
                     <% } %>
                     <div>
-                        <a class="btn btn-primary<% if (currentUser && campground.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>" href="/campgrounds/<%= campground._id %>/reviews/new">
+                        <a class="btn btn-primary<% if (currentUser && campground.reviews.some(review => {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>" href="/campgrounds/<%= campground._id %>/reviews/new">
                             Write a New Review</a>
                     </div>
                 </div>
@@ -99,9 +99,11 @@
                         <h4><strong>Comments <i class="fas fa-comments" aria-hidden="true"></i></span></strong></h4>
                     </div>
                     <div class="collapse" id="collapseComment">
-                        <div class="card" style="border-left: 5px solid #00c851;">
+                        <div class="card comment-well-new">
                             <% if(!currentUser) { %>
-                                <i class="fas fa-exclamation-triangle" style="color: red;"></i>You must be logged in to comment.<br><a href="/login">Click here</a> to log in
+                                <div>
+                                    <i class="fas fa-exclamation-triangle"></i>You must be logged in to comment.<br><a href="/login">Click here</a> to log in
+                                </div>
                             <% } %>
                             <% if(currentUser) { %>
                                 <h4>Add your comment <i class="fas fa-pencil-alt" aria-hidden="true"></i></h4>
@@ -118,7 +120,7 @@
                                                 cols="70">
                                         </textarea>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group comment-well-submit-btn">
                                         <button class="btn btn-success btn-sm">Submit</button> 
                                     </div>
                                 </form>
@@ -127,7 +129,7 @@
                     </div>
                     <hr>
                     <% if (campground.comments.length === 0) { %>
-                        <em style="color: gray;">No comments yet</em>
+                        <em>No comments yet</em>
                     <% } %>
                     <% campground.comments.forEach(comment => { %>
                         <div class="row">
@@ -146,11 +148,11 @@
                                     >
                                     Edit
                                     </a>
-                                    <form class="delete-form" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" style="display: inline;">
+                                    <form class="delete-form" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </form> 
                                     <div class="collapse" id="collapseEdit<%= comment._id %>">
-                                        <div class="card" style="border-left: 5px solid #ffbb33; margin-top: 15px;">
+                                        <div class="card comment-well-edit"> 
                                             <h4>Edit your comment <i class="fas fa-edit" aria-hidden="true"></i></h4>
                                             <form id="edit-comment-form<%= comment._id %>" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=PUT" method="POST">
                                                 <div class="form-group">
@@ -159,7 +161,7 @@
                                                 <div class="form-group">
                                                     <textarea class="form-control" name="comment[text]" form="edit-comment-form<%= comment._id %>" cols="70" rows="5"><%= comment.text %></textarea>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group comment-well-submit-btn">
                                                     <button class="btn btn-warning btn-sm">Submit</button>
                                                 </div>
                                             </form>
