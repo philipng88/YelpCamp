@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
     let pageQuery = parseInt(req.query.page)
     let pageNumber = pageQuery ? pageQuery : 1 
     Campground.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec((err, allCampgrounds) => {
-        Campground.count().exec((err, count) => {
+        Campground.estimatedDocumentCount().exec((err, count) => {
             if (err) {
                 console.log(err)
             } else {
@@ -81,17 +81,17 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) => {
         if(err) {
             res.redirect("/campgrounds") 
         } else {
-            Comment.remove({"_id": {$in: campground.comments}}, err => {
+            Comment.deleteOne({"_id": {$in: campground.comments}}, err => {
                 if (err) {
                     console.log(err)
                     return res.redirect("/campgrounds")
                 }
-                Review.remove({"_id": {$in: campground.reviews}}, err => {
+                Review.deleteOne({"_id": {$in: campground.reviews}}, err => {
                     if (err) {
                         console.log(err) 
                         return res.redirect("/campgrounds")
                     }
-                    campground.remove()
+                    campground.deleteOne()
                     req.flash("success", "Campground deleted")
                     res.redirect("/campgrounds") 
                 })

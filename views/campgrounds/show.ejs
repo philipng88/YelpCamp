@@ -1,35 +1,34 @@
 <% include ../partials/header %> 
-<div class="container">    
+<div class="container">  
     <div class="row">
         <div class="col-md-3">
             <p class="lead"><%= campground.name %></p>
-            <div class="list-group">
-                <li class="list-group-item active">Info 1</li>
-                <li class="list-group-item">Info 2</li>
-                <li class="list-group-item">Info 3</li>
-                <a class="btn btn-default text-left" href="/campgrounds"><i class="fas fa-arrow-left"></i> Back</a>
+            <div class="list-group" id="links-box">
+                <a class="list-group-item" href="#campground-info">Info</a>
+                <a class="list-group-item" href="#reviews-card">Reviews</a>
+                <a class="list-group-item" href="#comments-card">Comments</a>
             </div>
+            <a class="btn btn-default text-left" href="/campgrounds"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
         <div class="col-md-9">
-            <div class="card mb-3" id="show-page-image">
+            <div class="card mb-3">
                 <img class="card-img-top" src="<%= campground.image %>">
-                <div class="card-body">
+                <div class="card-body" id="campground-info">
                     <p class="float-right">$<%= Number(campground.price).toFixed(2) %> / night</p>
                     <h4 class="card-title"><a><%= campground.name %></a></h4>
                     <p><em>Submitted by <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em></p>
                     <hr>
                     <p class="card-text"><%= campground.description %></p>
                     <% if (currentUser && campground.author.id.equals(currentUser._id)) { %>
-                        <a class="btn btn-info" href="/campgrounds/<%= campground._id %>/edit">Edit</a> 
+                        <a class="btn btn-info btn-sm" href="/campgrounds/<%= campground._id %>/edit">Edit</a> 
                         <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger">Delete</button>
+                            <button class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     <% } %> 
                 </div>
             </div>
 
-            <!-- Reviews Card  -->
-            <div class="card mb-3">
+            <div id="reviews-card" class="card mb-3">
                 <div class="card-body">
                     <% if (campground.rating === 0) { %>
                     <h5>
@@ -82,8 +81,7 @@
                 </div>
             </div>
 
-            <!-- Comments Card  -->
-            <div class="card">
+            <div id="comments-card" class="card">
                 <div class="card-body">
                     <div>
                         <a class="btn btn-success float-right" 

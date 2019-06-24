@@ -1,5 +1,5 @@
-#show-page-image {
-    padding: 0;
+html {
+    scroll-behavior: smooth;
 }
 
 .delete-form {
@@ -18,6 +18,17 @@
 .form-primary {
     width: 30%; 
     margin: 25px auto;
+}
+
+#links-box a {
+    text-decoration: none;
+    background-color: #d6d8db;
+    color: black;
+    transition: .2s;
+}
+
+#links-box a:hover {
+    font-weight: bold;
 }
 
 .review-index-header {
