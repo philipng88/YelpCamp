@@ -8,12 +8,17 @@ const middleware = require("../middleware")
 mongoose.set('useFindAndModify', false)
 
 router.get("/", (req, res) => {
-    Campground.find({}, (err, allCampgrounds) => {
-        if(err) {
-            console.log(err)
-        } else {
-            res.render("campgrounds/index", {campgrounds: allCampgrounds, page:'campgrounds'})  
-        }
+    let perPage = 8
+    let pageQuery = parseInt(req.query.page)
+    let pageNumber = pageQuery ? pageQuery : 1 
+    Campground.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec((err, allCampgrounds) => {
+        Campground.count().exec((err, count) => {
+            if (err) {
+                console.log(err)
+            } else {
+                res.render("campgrounds/index", {campgrounds: allCampgrounds, current: pageNumber, pages: Math.ceil(count / perPage)})
+            }
+        })
     })
 })
 
