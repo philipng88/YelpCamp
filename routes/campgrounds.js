@@ -81,7 +81,7 @@ router.get("/new", middleware.isLoggedIn, (req, res) => {
 })
 
 router.get("/:id", (req, res) => {
-    Campground.findById(req.params.id).populate("comments").populate({
+    Campground.findById(req.params.id).populate("comments likes").populate({
         path: "reviews",
         options: {sort: {createdAt: -1}} 
     }).exec((err, foundCampground) => {
@@ -101,11 +101,22 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, (req, res) => {
 
 router.put("/:id", middleware.checkCampgroundOwnership, (req, res) => {
     delete req.body.campground.rating 
-    Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) => {
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground) => {
         if(err) {
+            console.log(err)
             res.redirect("/campgrounds") 
         } else {
-            res.redirect("/campgrounds/" + req.params.id) 
+            campground.name = req.body.campground.name 
+            campground.description = req.body.campground.description
+            campground.image = req.body.campground.image 
+            campground.save(err => {
+                if (err) {
+                    console.log(err)
+                    res.redirect("/campgrounds")
+                } else {
+                    res.redirect("/campgrounds/" + campground._id) 
+                }
+            })
         }
     })
 })
@@ -131,6 +142,30 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) => {
                 })
             })
         } 
+    })
+})
+
+router.post("/:id/like", middleware.isLoggedIn, (req, res) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+        if (err) {
+            console.log(err)
+            return res.redirect("/campgrounds")
+        }
+        const foundUserLike = foundCampground.likes.some(like => {
+            return like.equals(req.user._id) 
+        })
+        if (foundUserLike) {
+            foundCampground.likes.pull(req.user._id) 
+        } else {
+            foundCampground.likes.push(req.user) 
+        }
+        foundCampground.save(err => {
+            if (err) {
+                console.log(err)
+                return res.redirect("/campgrounds")
+            }
+            return res.redirect("/campgrounds/" + foundCampground._id) 
+        })
     })
 })
 

@@ -31,6 +31,15 @@ html {
     font-weight: bold;
 }
 
+.campground-likes-wrapper {
+    padding-bottom: 10px;
+}
+
+.fa-thumbs-up,
+.fa-user-circle {
+    margin-right: 5px;
+}
+
 .review-index-header {
     margin-bottom: 25px;
 }

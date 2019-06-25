@@ -17,6 +17,59 @@
                     <p class="float-right">$<%= Number(campground.price).toFixed(2) %> / night</p>
                     <h4 class="card-title"><a><%= campground.name %></a></h4>
                     <p><em>Submitted by <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em></p>
+                    <div class="campground-likes-wrapper">
+                        <form action="/campgrounds/<%= campground._id %>/like" method="POST">
+                            <div class="btn-group">
+                                <% if (currentUser && campground.likes.some(like => { %> 
+                                    <% return like.equals(currentUser._id) %> 
+                                <% })) { %>
+                                    <button class="btn btn-sm btn-primary">
+                                        <i class="fas fa-thumbs-up"></i><%= campground.likes.length %>
+                                    </button> 
+                                <% } else { %> 
+                                    <button class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-thumbs-up"></i><%= campground.likes.length %>
+                                    </button>  
+                                <% } %> 
+                                <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#campgroundLikes">
+                                    See who has liked
+                                </button>  
+                            </div>
+                        </form>
+                    </div>
+                    <div id="campgroundLikes" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Likes for <%= campground.name %>: <%= campground.likes.length %></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Liked by:</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% campground.likes.forEach(like => { %>
+                                                <tr>
+                                                    <td><i class="fas fa-user-circle"></i><%= like.username %></td>
+                                                </tr>
+                                            <% }) %> 
+                                            <% if (campground.likes.length === 0) { %>
+                                                <tr>
+                                                    <td><em>No likes yet</em></td>
+                                                </tr>
+                                            <% } %> 
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <hr>
                     <p class="card-text"><%= campground.description %></p>
                     <% if (currentUser && campground.author.id.equals(currentUser._id)) { %>
@@ -37,7 +90,7 @@
                     <% } else { %>
                     <p>
                         <span class="fas fa-star checked"></span>
-                        <span class="fas fa-star <% if (campground.rating > 1.5) { %> checked <% } %>"></span>
+                        <span class="fas fa-star <% if (campground.rating > 1.5) { %> checked <% } %>"></%>
                         <span class="fas fa-star <% if (campground.rating > 2.5) { %> checked <% } %>"></span>
                         <span class="fas fa-star <% if (campground.rating > 3.5) { %> checked <% } %>"></span>
                         <span class="fas fa-star <% if (campground.rating > 4.5) { %> checked <% } %>"></span>
