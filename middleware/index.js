@@ -18,7 +18,7 @@ middlewareObj.checkCampgroundOwnership = (req, res, next) => {
                 req.flash("error", "Campground not found")
                 res.redirect("back")
             } else {
-                if (foundCampground.author.id.equals(req.user._id)) {
+                if (foundCampground.author.id.equals(req.user._id) || req.user.isAdmin) {
                     next()
                 } else {
                     req.flash("error", "You don't have the required permissions for that action")
@@ -39,7 +39,7 @@ middlewareObj.checkCommentOwnership = (req, res, next) => {
                 req.flash("error", "Comment not found") 
                 res.redirect("back")
             } else {
-                if (foundComment.author.id.equals(req.user._id)) {
+                if (foundComment.author.id.equals(req.user._id) || req.user.isAdmin) {
                     next()
                 } else {
                     req.flash("error", "You don't have the required permissions for that action")
@@ -60,7 +60,7 @@ middlewareObj.checkReviewOwnership = (req, res, next) => {
                 req.flash("error", "Review not found")
                 res.redirect("back") 
             } else {
-                if (foundReview.author.id.equals(req.user._id)) {
+                if (foundReview.author.id.equals(req.user._id) || req.user.isAdmin) {
                     next()
                 } else {
                     req.flash("error", "You don't have the required permissions for that action")

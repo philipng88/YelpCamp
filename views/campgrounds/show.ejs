@@ -72,10 +72,10 @@
                     </div>
                     <hr>
                     <p class="card-text"><%= campground.description %></p>
-                    <% if (currentUser && campground.author.id.equals(currentUser._id)) { %>
-                        <a class="btn btn-info btn-sm" href="/campgrounds/<%= campground._id %>/edit">Edit</a> 
+                    <% if (currentUser && campground.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
+                        <a class="btn btn-info btn-sm" href="/campgrounds/<%= campground._id %>/edit">Edit Campground</a> 
                         <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger btn-sm">Delete</button>
+                            <button class="btn btn-danger btn-sm">Delete Campground</button>
                         </form>
                     <% } %> 
                 </div>
@@ -112,7 +112,7 @@
                             <p class="review-text">
                                 <%= review.text %>
                             </p>
-                            <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
+                            <% if(currentUser && review.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
                             <a class="btn btn-sm btn-info"
                                href="/campgrounds/<%=campground._id %>/reviews/<%=review._id %>/edit">Edit</a>
                             <form class="delete-form" action="/campgrounds/<%=campground._id %>/reviews/<%=review._id %>?_method=DELETE" method="POST">
@@ -188,7 +188,7 @@
                                 <span class="float-right"><%= moment(comment.createdAt).fromNow() %></span>
                                 <strong><%= comment.author.username %></strong>
                                 <p> <%= comment.text %> </p> 
-                                <% if (currentUser && currentUser._id.equals(comment.author.id)) { %>
+                                <% if (currentUser && currentUser._id.equals(comment.author.id) || currentUser && currentUser.isAdmin) { %>
                                     <a 
                                         class="btn btn-sm btn-info" 
                                         role="button" 
@@ -204,7 +204,7 @@
                                     </form> 
                                     <div class="collapse" id="collapseEdit<%= comment._id %>">
                                         <div class="card comment-well-edit"> 
-                                            <h4>Edit your comment <i class="fas fa-edit" aria-hidden="true"></i></h4>
+                                            <h4>Edit comment <i class="fas fa-edit" aria-hidden="true"></i></h4>
                                             <form id="edit-comment-form<%= comment._id %>" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=PUT" method="POST">
                                                 <div class="form-group">
                                                     <input class="form-control" type="text" value="<%= currentUser.username %>" disabled>

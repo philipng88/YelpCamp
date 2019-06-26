@@ -1,3 +1,4 @@
+require('dotenv').config() 
 const express = require("express")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
@@ -7,6 +8,7 @@ const LocalStrategy = require("passport-local")
 const methodOverride = require("method-override")
 const User = require("./models/user") 
 const app = express()
+const port = parseInt(process.env.DB_PORT)
 
 const commentRoutes = require("./routes/comments")
 const reviewRoutes = require("./routes/reviews")
@@ -21,7 +23,7 @@ app.use(methodOverride("_method"))
 app.use(flash()) 
 
 app.use(require("express-session")({
-    secret: "Once again Rusty wins cutest dog",
+    secret: process.env.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }))
@@ -46,7 +48,6 @@ app.use("/campgrounds", campgroundRoutes)
 app.use("/campgrounds/:id/comments", commentRoutes)
 app.use("/campgrounds/:id/reviews", reviewRoutes) 
 
-app.listen(3000, () => {
-    console.log("The YelpCamp server has started...") 
+app.listen(port, () => {
+    console.log(`The YelpCamp server has started on port ${port}`) 
 })
-

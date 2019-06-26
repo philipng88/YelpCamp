@@ -3,6 +3,8 @@ const router = express.Router()
 const passport = require("passport")
 const User = require("../models/user")
 
+require('dotenv').config() 
+
 router.get("/", (req, res) => {
     res.render("landing")
 })
@@ -13,6 +15,9 @@ router.get("/register", (req, res) => {
 
 router.post("/register", (req, res) => {
     let newUser = new User({username: req.body.username})
+    if (req.body.adminCode === process.env.ADMIN_CODE) {
+        newUser.isAdmin = true 
+    }
     User.register(newUser, req.body.password, (err, user) => {
         if(err) {
             req.flash("error", err.message) 
