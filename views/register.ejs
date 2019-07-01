@@ -6,14 +6,35 @@
         </div>
         <div class="form-primary">
             <form action="/register" method="POST">
-                <div class="form-group">
-                    <input class="form-control" type="text" name="username" placeholder="Username">
+                <div class="form-group input-group">
+                    <input 
+                        class="form-control fas fa-user" 
+                        type="text" 
+                        name="username" 
+                        placeholder="&#xf007; Create Username" 
+                        required
+                    />
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="password" placeholder="Password">
+                <div class="form-group input-group">
+                    <input 
+                        class="form-control fas fa-lock" 
+                        type="password" 
+                        name="password" 
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                        placeholder="&#xf023; Create Password"
+                        title="Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        required
+                    />
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="adminCode" placeholder="Admin Code"> 
+                <input type="checkbox" name="admin-option">
+                <label for="admin-option">Sign up with admin privileges</label>
+                <div class="form-group reveal-if-active input-group">
+                    <input 
+                        class="form-control fas fa-key" 
+                        type="password" 
+                        name="adminCode" 
+                        placeholder="&#xf084; Enter Admin Code"
+                    /> 
                 </div>
                 <div class="form-group">
                     <button class="btn btn-lg btn-primary btn-block">Submit</button>

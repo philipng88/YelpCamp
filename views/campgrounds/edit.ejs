@@ -7,19 +7,25 @@
         <div class="form-primary">
             <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="campground[name]" value="<%= campground.name %>">
+                    <label class="has-float-label">
+                        <input class="form-control" type="text" name="campground[name]" value="<%= campground.name %>">
+                        <span>Name</span>
+                    </label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="number" name="campground[price]" value="<%= campground.price %>" min="0.00" step="0.01">
+                    <label class="has-float-label">
+                        <input class="form-control" type="text" name="campground[image]" value="<%= campground.image %>">
+                        <span>Image URL</span>
+                    </label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="campground[image]" value="<%= campground.image %>">
+                    <label class="has-float-label">
+                        <input class="form-control" type="text" name="campground[description]" value="<%= campground.description %>">
+                        <span>Description</span>
+                    </label>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="campground[description]" value="<%= campground.description %>">
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-lg btn-primary btn-block">Submit</button>
+                    <button class="btn btn-lg btn-primary btn-block">Submit Changes</button>
                 </div>
             </form>
             <a href="/campgrounds/<%= campground._id %>">Back</a> 

@@ -11,26 +11,26 @@ middlewareObj.isLoggedIn = (req, res, next) => {
     res.redirect("/login") 
 }
 
-middlewareObj.checkCampgroundOwnership = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        Campground.findById(req.params.id, (err, foundCampground) => {
-            if(err) {
-                req.flash("error", "Campground not found")
-                res.redirect("back")
-            } else {
-                if (foundCampground.author.id.equals(req.user._id) || req.user.isAdmin) {
-                    next()
-                } else {
-                    req.flash("error", "You don't have the required permissions for that action")
-                    res.redirect("back") 
-                }
-            }
-        })
-    } else {
-        req.flash("error", "Please Log In")
-        res.redirect("back") 
-    }
-}
+// middlewareObj.checkCampgroundOwnership = (req, res, next) => {
+//     if (req.isAuthenticated()) {
+//         Campground.findById(req.params.id, (err, foundCampground) => {
+//             if(err) {
+//                 req.flash("error", "Campground not found")
+//                 res.redirect("back")
+//             } else {
+//                 if (foundCampground.author.id.equals(req.user._id) || req.user.isAdmin) {
+//                     next()
+//                 } else {
+//                     req.flash("error", "You don't have the required permissions for that action")
+//                     res.redirect("back") 
+//                 }
+//             }
+//         })
+//     } else {
+//         req.flash("error", "Please Log In")
+//         res.redirect("back") 
+//     }
+// }
 
 middlewareObj.checkCommentOwnership = (req, res, next) => {
     if (req.isAuthenticated()) {
@@ -95,6 +95,14 @@ middlewareObj.checkReviewExistence = (req, res, next) => {
         req.flash("error", "Please Log In")
         res.redirect("back") 
     }
+}
+
+middlewareObj.isLoggedInAndAdmin = (req, res, next) => {
+    if (req.isAuthenticated() && req.user.isAdmin) {
+        return next()
+    }
+    req.flash("error", "You must be logged in as an admin")
+    res.redirect("/campgrounds") 
 }
 
 module.exports = middlewareObj

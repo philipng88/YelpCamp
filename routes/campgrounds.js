@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
 
     if (req.query.search) {
         const regex = new RegExp(escapeRegex(req.query.search), 'gi')
-        Campground.find({name: regex}).skip((perPage * pageNumber) - perPage).limit(perPage).exec((err, allCampgrounds) => {
+        Campground.find({name: regex}).sort({'_id': -1}).skip((perPage * pageNumber) - perPage).limit(perPage).exec((err, allCampgrounds) => {
             Campground.countDocuments({name: regex}).exec((err, count) => {
                 if (err) {
                     console.log(err)
@@ -38,7 +38,7 @@ router.get("/", (req, res) => {
             })
         })
     } else {
-        Campground.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec((err, allCampgrounds) => {
+        Campground.find({}).sort({'_id': -1}).skip((perPage * pageNumber) - perPage).limit(perPage).exec((err, allCampgrounds) => {
             Campground.countDocuments().exec((err, count) => {
                 if (err) {
                     console.log(err)
@@ -56,17 +56,16 @@ router.get("/", (req, res) => {
     }
 })
 
-router.post("/", middleware.isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedInAndAdmin, (req, res) => {
     let name = req.body.name 
-    let price = req.body.price
     let image = req.body.image
     let description = req.body.description
     let author = {
         id: req.user._id, 
         username: req.user.username
     }
-    let newCampground = {name: name, price: price, image: image, description: description, author: author}
-    Campground.create(newCampground, (err, newlyCreated) => {
+    let newCampground = {name: name, image: image, description: description, author: author}
+    Campground.create(newCampground, err => {
         if(err) {
             console.log(err)
         } else {
@@ -76,7 +75,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     })
 }) 
 
-router.get("/new", middleware.isLoggedIn, (req, res) => {
+router.get("/new", middleware.isLoggedInAndAdmin, (req, res) => {
     res.render("campgrounds/new") 
 })
 
@@ -87,19 +86,22 @@ router.get("/:id", (req, res) => {
     }).exec((err, foundCampground) => {
         if(err) {
             console.log(err)
-        } else {
+        } else if(foundCampground) {
             res.render("campgrounds/show", {campground: foundCampground}) 
+        } else {
+            req.flash("error", "Campground not found")
+            res.redirect("back") 
         }
     }) 
 })
 
-router.get("/:id/edit", middleware.checkCampgroundOwnership, (req, res) => {
+router.get("/:id/edit", middleware.isLoggedInAndAdmin, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         res.render("campgrounds/edit", {campground: foundCampground}) 
     })
 })
 
-router.put("/:id", middleware.checkCampgroundOwnership, (req, res) => {
+router.put("/:id", middleware.isLoggedInAndAdmin, (req, res) => {
     delete req.body.campground.rating 
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground) => {
         if(err) {
@@ -121,7 +123,7 @@ router.put("/:id", middleware.checkCampgroundOwnership, (req, res) => {
     })
 })
 
-router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) => {
+router.delete("/:id", middleware.isLoggedInAndAdmin, (req, res) => {
     Campground.findById(req.params.id, (err, campground) => {
         if(err) {
             res.redirect("/campgrounds") 

@@ -6,6 +6,7 @@ const flash = require("connect-flash")
 const passport = require("passport")
 const LocalStrategy = require("passport-local")
 const methodOverride = require("method-override")
+const helmet = require('helmet') 
 const User = require("./models/user") 
 const app = express()
 const port = parseInt(process.env.DB_PORT)
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.set("view engine", "ejs")
 app.use(express.static(__dirname + "/public")) 
 app.use(methodOverride("_method")) 
+app.use(helmet()) 
 app.use(flash()) 
 
 app.use(require("express-session")({
@@ -39,7 +41,8 @@ passport.deserializeUser(User.deserializeUser())
 app.use((req, res, next) => {
     res.locals.currentUser = req.user 
     res.locals.error = req.flash("error")
-    res.locals.success = req.flash("success") 
+    res.locals.success = req.flash("success")
+    res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0') 
     next() 
 })
 

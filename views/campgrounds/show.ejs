@@ -1,20 +1,19 @@
 <% include ../partials/header %> 
 <div class="container">  
     <div class="row">
-        <div class="col-md-3">
-            <p class="lead"><%= campground.name %></p>
+        <div class="col-md-3 side-nav">
             <div class="list-group" id="links-box">
+                <p class="list-group-item lead"><%= campground.name %></p>
                 <a class="list-group-item" href="#campground-info">Info</a>
                 <a class="list-group-item" href="#reviews-card">Reviews</a>
                 <a class="list-group-item" href="#comments-card">Comments</a>
+                <a class="list-group-item btn btn-default text-left" href="/campgrounds"><i class="fas fa-arrow-left"></i> Back</a>
             </div>
-            <a class="btn btn-default text-left" href="/campgrounds"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
         <div class="col-md-9">
             <div class="card mb-3">
                 <img class="card-img-top" src="<%= campground.image %>">
                 <div class="card-body" id="campground-info">
-                    <p class="float-right">$<%= Number(campground.price).toFixed(2) %> / night</p>
                     <h4 class="card-title"><a><%= campground.name %></a></h4>
                     <p><em>Submitted by <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em></p>
                     <div class="campground-likes-wrapper">
@@ -72,7 +71,7 @@
                     </div>
                     <hr>
                     <p class="card-text"><%= campground.description %></p>
-                    <% if (currentUser && campground.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
+                    <% if (currentUser && currentUser.isAdmin) { %>
                         <a class="btn btn-info btn-sm" href="/campgrounds/<%= campground._id %>/edit">Edit Campground</a> 
                         <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
                             <button class="btn btn-danger btn-sm">Delete Campground</button>
@@ -129,7 +128,8 @@
                     <% } %>
                     <div>
                         <a class="btn btn-primary<% if (currentUser && campground.reviews.some(review => {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>" href="/campgrounds/<%= campground._id %>/reviews/new">
-                            Write a New Review</a>
+                            <i class="fas fa-edit"></i>Write a New Review
+                        </a>
                     </div>
                 </div>
             </div>
@@ -228,4 +228,4 @@
         </div>
     </div>
 </div>
-<% include ../partials/footer %>
+<% include ../partials/footer-copyright %>

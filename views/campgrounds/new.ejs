@@ -6,19 +6,25 @@
         </div>
         <div class="form-primary">
             <form action="/campgrounds" method="POST">
-                <div class="form-group">
-                    <input class="form-control" type="text" name="name" placeholder="name">
+                <div class="form-group input-group">
+                    <label class="has-float-label">
+                        <input class="form-control" type="text" name="name">
+                        <span>Name</span> 
+                    </label>    
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="number" name="price" placeholder="price (per night)" min="0.00" step="0.01">
+                <div class="form-group input-group">
+                    <label class="has-float-label">
+                        <input class="form-control" type="url" name="image" pattern=".*images.unsplash.com.*">
+                        <span>Image URL</span>
+                    </label>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="text" name="image" placeholder="image url">
+                <div class="form-group input-group">
+                    <label class="has-float-label">
+                        <input class="form-control" type="text" name="description">
+                        <span>Description</span>
+                    </label>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="text" name="description" placeholder="description">
-                </div>
-                <div class="form-group">
+                <div class="form-group input-group">
                     <button class="btn btn-lg btn-primary btn-block">Submit</button>
                 </div>
             </form>

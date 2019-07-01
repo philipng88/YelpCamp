@@ -3,8 +3,6 @@ const router = express.Router()
 const passport = require("passport")
 const User = require("../models/user")
 
-require('dotenv').config() 
-
 router.get("/", (req, res) => {
     res.render("landing")
 })
