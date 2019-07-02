@@ -7,25 +7,51 @@ input[placeholder]:focus::-webkit-input-placeholder {
     opacity: 0;
 }
 
-.campground-link h5 {
-    transition: 0.2s ease-in-out;
+.search-wrapper {
+    margin-top: 12px;
 }
 
-.campground-link h5:hover {
-    font-weight: bolder;
+#search-button {
+    height: 36px;
+    padding: 6px 12px;
+}
+
+.campground-item-wrapper {
+    transition: transform .2s ease-in-out;
+}
+
+.campground-item-wrapper:hover {
+    transform: scale(1.1);
+}
+
+.stretched-link:hover {
+    text-decoration: none;
 }
 
 .delete-form {
     display: inline;
 }
 
+.campground-form-input:focus {
+    border-color: #ccc;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 .checked {
     color: orange;
 }
 
-#login-btn,
-#navbar-username-display {
+#login-link,
+#navbar-username-display,
+.fa-thumbs-up,
+.fa-user-circle,
+.fa-edit {
     margin-right: 5px;
+}
+
+#navbar-username-display:hover {
+    cursor: not-allowed;
 }
 
 .form-primary {
@@ -46,7 +72,7 @@ input[placeholder]:focus::-webkit-input-placeholder {
     text-decoration: none;
     background-color: #d6d8db;
     color: black;
-    transition: .2s;
+    transition: .2s ease-in-out;
 }
 
 #links-box a:hover {
@@ -57,11 +83,6 @@ input[placeholder]:focus::-webkit-input-placeholder {
     padding-bottom: 10px;
 }
 
-.fa-thumbs-up,
-.fa-user-circle {
-    margin-right: 5px;
-}
-
 .review-index-header {
     margin-bottom: 25px;
 }
@@ -69,10 +90,6 @@ input[placeholder]:focus::-webkit-input-placeholder {
 .review-text {
     text-align: justify;
     word-wrap: break-word;
-}
-
-.fa-edit {
-    margin-right: 5px;
 }
 
 .comment-well-new { 
@@ -110,4 +127,16 @@ input[type="checkbox"]:checked ~ .reveal-if-active {
     opacity: 1;
     max-height: 100px;
     overflow: visible;
+}
+
+@media only screen and (max-width: 767px) {
+    .welcome-heading {
+        font-size: 30px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .campground-item-wrapper:hover {
+        transform: scale(1);
+    }
 }

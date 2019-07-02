@@ -6,25 +6,33 @@
         </div>
         <div class="form-primary">
             <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
-                <div class="form-group">
+                <div class="form-group input-group">
                     <label class="has-float-label">
-                        <input class="form-control" type="text" name="campground[name]" value="<%= campground.name %>">
+                        <input class="form-control campground-form-input" type="text" name="campground[name]" value="<%= campground.name %>" required>
                         <span>Name</span>
                     </label>
                 </div>
-                <div class="form-group">
+                <div class="form-group input-group">
                     <label class="has-float-label">
-                        <input class="form-control" type="text" name="campground[image]" value="<%= campground.image %>">
+                        <input class="form-control campground-form-input" type="number" name="campground[price]" value="<%= campground.price %>" min="0.00" max="20.00" step="1.00" required> 
+                        <span>Price Per Night</span> 
+                        <small class="form-text"><strong>Note:</strong> Price must be between 0 (i.e., free) and 20</small>
+                    </label>    
+                </div>
+                <div class="form-group input-group">
+                    <label class="has-float-label">
+                        <input class="form-control campground-form-input" type="text" name="campground[image]" value="<%= campground.image %>" pattern="^https:\/\/images\.unsplash\.com\/.*" required>
                         <span>Image URL</span>
+                        <small class="form-text"><strong>Note:</strong> Only images from <a href="https://unsplash.com/" target="_blank">Unsplash.com</a> are accepted</small>
                     </label>
                 </div>
-                <div class="form-group">
+                <div class="form-group input-group">
                     <label class="has-float-label">
-                        <input class="form-control" type="text" name="campground[description]" value="<%= campground.description %>">
+                        <input class="form-control campground-form-input" type="text" name="campground[description]" value="<%= campground.description %>">
                         <span>Description</span>
                     </label>
                 </div>
-                <div class="form-group">
+                <div class="form-group input-group">
                     <button class="btn btn-lg btn-primary btn-block">Submit Changes</button>
                 </div>
             </form>

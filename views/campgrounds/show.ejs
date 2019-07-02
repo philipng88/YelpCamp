@@ -1,7 +1,7 @@
 <% include ../partials/header %> 
 <div class="container">  
     <div class="row">
-        <div class="col-md-3 side-nav">
+        <div class="col-md-3">
             <div class="list-group" id="links-box">
                 <p class="list-group-item lead"><%= campground.name %></p>
                 <a class="list-group-item" href="#campground-info">Info</a>
@@ -14,6 +14,11 @@
             <div class="card mb-3">
                 <img class="card-img-top" src="<%= campground.image %>">
                 <div class="card-body" id="campground-info">
+                    <% if (campground.price === 0) { %> 
+                        <h4 class="float-right">Free</h4>
+                    <% } else { %>
+                        <h4 class="float-right">$<%= campground.price %>/night</h4>
+                    <% } %> 
                     <h4 class="card-title"><a><%= campground.name %></a></h4>
                     <p><em>Submitted by <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em></p>
                     <div class="campground-likes-wrapper">
@@ -70,7 +75,11 @@
                         </div>
                     </div>
                     <hr>
-                    <p class="card-text"><%= campground.description %></p>
+                    <% if (campground.description === '') { %>
+                        <p><em>No description provided for this campground</em></p>
+                    <% } else { %>
+                        <p class="card-text"><%= campground.description %></p>
+                    <% } %> 
                     <% if (currentUser && currentUser.isAdmin) { %>
                         <a class="btn btn-info btn-sm" href="/campgrounds/<%= campground._id %>/edit">Edit Campground</a> 
                         <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
